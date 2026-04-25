@@ -8,7 +8,7 @@ function App() {
     //Effect (runs when component loads)
     useEffect(() => {
         //Fetch request
-        fetch("http://localhost:3000/jobs")
+        fetch("http://localhost:3000/jobs?company=Sony&location=remote")
         .then((response) => response.json()) //convert response to JSON
         .then((data) => {
         //update the state with backend data 
