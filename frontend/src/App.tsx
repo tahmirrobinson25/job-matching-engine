@@ -12,22 +12,6 @@ function App() {
     //State stores data from backend
     const [jobs,setJobs] = useState<Job[]> ([]);
 
-    
-
-    //fetching data with callbacks
-    /*
-    useEffect(() => {
-        //Fetch request
-        fetch("http://localhost:3000/jobs")
-        .then((response) => response.json()) //convert response to JSON
-        .then((data) => {
-        //update the state with backend data 
-        console.log("DATA FROM BACKEND:", data);
-        setJobs(data);
-        });
-    }, []);
-    */
-
     //Calling jobs using async/await
     useEffect(() => {
     const fetchJobs = async () => {
@@ -73,6 +57,14 @@ function App() {
                 </div>
                 <div>
                 <button type="submit" onClick={handleClick}>Search all jobs</button>
+                </div>
+                <div >
+                    {jobs.map((job) => (
+                        <div key={job.id} >
+                        <h3>{job.title}</h3>
+                        <p >{job.company} - {job.location} - {job.type}</p>
+                        </div>
+                    ))}
                 </div>
                 
             </div>
