@@ -113,7 +113,7 @@ const scoreType = (jobType, userType) => {
 };
 
 app.get("/jobs", (req, res) => {
-    let filteredJobs = jobs;
+    let filterJobs = jobs;
 
     const location = req.query.location;
     const title = req.query.title;
@@ -121,19 +121,19 @@ app.get("/jobs", (req, res) => {
     const type = req.query.type;
 
     const weights = {
-      location: 3,
       title: 5,
+      location: 3,
       type: 2
     }
 
     if (company) {
-      filteredJobs = filteredJobs.filter((job) =>
+      filterJobs = filterJobs.filter((job) =>
       job.company.toLowerCase() === company.toLowerCase()
       );
     };
 
 
-     const scoredJobs = filteredJobs.map((job) => {
+     const scoredJobs = filterJobs.map((job) => {
       const scoredTitle = scoreTitle(job.title, title) * weights.title;
       const scoredLocation = scoreLocation(job.location, location) * weights.location;
       const scoredType = scoreType(job.type, type) * weights.type;
@@ -141,9 +141,17 @@ app.get("/jobs", (req, res) => {
       return {...job, score};
     });
 
+    //const filteredJobs = scoredJobs.filter((job => job.score > 0))
+
     const sortedJobs = scoredJobs.sort((a, b) => {
+
       return b.score - a.score;
-    })
+
+      
+    }); 
+
+    
+
 
     res.json(sortedJobs);
 });
