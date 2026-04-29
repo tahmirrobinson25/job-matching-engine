@@ -6,15 +6,23 @@ import {useState, useEffect} from "react";
         company: string;
         location: string;
         type: string;
+        score: number;
     };
 
+
+    
 function App() {
     //State stores data from backend
     const [jobs,setJobs] = useState<Job[]> ([]);
+    const [filters, setFilters] = useState({
+        title: "",
+        location: "",
+        type: ""
+    });
 
     //Calling jobs using async/await
     useEffect(() => {
-    const fetchJobs = async () => {
+    const  fetchJobs = async () => {
     try {
       const response = await fetch("http://localhost:3000/jobs");
       const data : Job[] = await response.json();
@@ -24,6 +32,8 @@ function App() {
     } catch (error :unknown) {
       console.error(error);
     }
+
+    
   };
 
   fetchJobs();
@@ -32,6 +42,24 @@ function App() {
     const handleClick = () => {
     alert("Job submission successful");
 }
+
+const handleSubmit = async () => {
+  try {
+    const response = await fetch(`http://localhost:3000/jobs?title=${filters.title}&location=${filters.location}&type=${filters.type}`)
+
+    const data: Job[] = await response.json();
+
+  console.log("Filters:", filters);
+  console.log("Response:", data);
+
+  setJobs(data);
+  }
+  catch (err: unknown) {
+    console.error(err)
+  }
+    
+  } 
+
 
     //Display data
     return (
@@ -45,24 +73,30 @@ function App() {
             <div>
                 <div>
                 <label>Enter Job Title: </label>
-                <input type="text" placeholder="Ex. 'Software Engineer'"/>
+                <input type="text" value={filters.title} placeholder="Ex. 'Software Engineer'"
+                onChange={(e) => setFilters({...filters, title: e.target.value})}/>
                 </div>
                 <div>
                 <label>Enter Location: </label>
-                <input type="text" placeholder="Ex. 'New Jersey' or 'Remote'" />
+                <input type="text" value={filters.location} placeholder="Ex. 'New Jersey' or 'Remote'"
+                onChange={(e) => setFilters({...filters, location: e.target.value})} />
                 </div>
                 <div>
                 <label>Enter Job Type: </label>
-                <input type="text" placeholder="Ex. 'Full-time' "/>
+                <input type="text" value={filters.type}  placeholder="Ex. 'Full-time' "
+                onChange={(e) => setFilters({...filters, type: e.target.value})}/>
                 </div>
                 <div>
-                <button type="submit" onClick={handleClick}>Search all jobs</button>
+                <button onClick={handleSubmit}>Search all jobs</button>
                 </div>
-                <div >
+                <div>
                     {jobs.map((job) => (
                         <div key={job.id} >
                         <h3>{job.title}</h3>
-                        <p >{job.company} - {job.location} - {job.type}</p>
+                        <p >Company: {job.company}</p> {/*Comment*/}
+                        <p>Location: {job.location}</p>
+                        <p>Type: {job.type}</p>
+                        <p>Score: {job.score}</p>
                         </div>
                     ))}
                 </div>
