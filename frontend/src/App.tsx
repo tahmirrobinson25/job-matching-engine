@@ -74,17 +74,17 @@ const handleSubmit = async () => {
                 <div>
                 <label>Enter Job Title: </label>
                 <input type="text" value={filters.title} placeholder="Ex. 'Software Engineer'"
-                onChange={(e) => setFilters({...filters, title: e.target.value})}/>
+                onChange={(e) => setFilters({...filters, title: e.target.value})} style={{width:275}} />
                 </div>
                 <div>
                 <label>Enter Location: </label>
                 <input type="text" value={filters.location} placeholder="Ex. 'New Jersey' or 'Remote'"
-                onChange={(e) => setFilters({...filters, location: e.target.value})} />
+                onChange={(e) => setFilters({...filters, location: e.target.value})} style={{width:275}}/>
                 </div>
                 <div>
                 <label>Enter Job Type: </label>
-                <input type="text" value={filters.type}  placeholder="Ex. 'Full-time' "
-                onChange={(e) => setFilters({...filters, type: e.target.value})}/>
+                <input type="text" value={filters.type}  placeholder="Ex. 'Full-time', 'Part-time', 'Contract', 'Hybrid'"
+                onChange={(e) => setFilters({...filters, type: e.target.value})} style={{width:275}}/>
                 </div>
                 <div>
                 <button onClick={handleSubmit}>Search all jobs</button>
