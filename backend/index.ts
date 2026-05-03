@@ -1,11 +1,13 @@
-const express = require('express');
-const cors = require('cors');
+import cors from 'cors';
+import express from 'express';
+import type {Request, Response} from 'express';
+
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-let jobs = [
+ let jobs = [
     {
      id: 1,
      title: "Software Engineer",
@@ -45,11 +47,11 @@ let jobs = [
       location: "New Jersey",
       type: "Hybrid"
     }
-];
+]; 
 
 
 
-const scoreTitle = (jobTitle, userTitle) => {
+const scoreTitle = (jobTitle :string , userTitle :string) => {
   const job = jobTitle.toLowerCase();
   const user = (userTitle || "").toLowerCase();
 
@@ -73,7 +75,7 @@ const scoreTitle = (jobTitle, userTitle) => {
   };
 };
 
-const scoreLocation = (jobLocation, userLocation) => {
+const scoreLocation = (jobLocation :string, userLocation : string) => {
   const jobLoc = jobLocation.toLowerCase();
   const userLoc = (userLocation || "").toLowerCase();
 
@@ -97,7 +99,7 @@ const scoreLocation = (jobLocation, userLocation) => {
   };
 };
 
-const scoreType = (jobType, userType) => {
+const scoreType = (jobType :string , userType :string) => {
   const jType = jobType.toLowerCase();
   const uType = (userType || "").toLowerCase();
 
@@ -112,13 +114,13 @@ const scoreType = (jobType, userType) => {
     return 0;
 };
 
-app.get("/jobs", (req, res) => {
+app.get("/jobs", (req :Request, res :Response) => {
     let filterJobs = jobs;
 
-    const location = req.query.location;
-    const title = req.query.title;
-    const company = req.query.company;
-    const type = req.query.type;
+    const location = req.query.location as string;
+    const title = req.query.title as string;
+    const company = req.query.company as string;
+    const type = req.query.type as string;
 
     const weights = {
       title: 5,
@@ -156,7 +158,7 @@ app.get("/jobs", (req, res) => {
     res.json(sortedJobs);
 });
 
-const PORT = 3000;
+const PORT : number = 3000;
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
