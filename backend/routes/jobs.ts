@@ -6,9 +6,6 @@ import type { Request, Response } from 'express';
 export const router = Router();
 
 router.get('/',  (req :Request, res :Response) => {
-
-  console.log("Job Routes Hit");
-
     let filterJobs = jobs;
 
     const location = req.query.location as string;
