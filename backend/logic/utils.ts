@@ -63,3 +63,30 @@ export const scoreType = (jobType :string , userType :string) => {
     return 0;
 };
 
+export const scoreSalary = (jobSalary :number, userSalary :number) =>  {
+    const jSalary = jobSalary;
+    const uSalary = userSalary;
+
+    if (!uSalary)
+    {
+        return 0;
+    }
+    
+    if (jSalary >= uSalary)
+    {
+        return 100;
+    }
+
+    if (jSalary  >= (uSalary - 10000))
+    {
+        return 75;
+    }
+
+    else if (jSalary >= (uSalary - 20000))
+    {
+        return 50;
+    }
+
+    return 0;
+
+}

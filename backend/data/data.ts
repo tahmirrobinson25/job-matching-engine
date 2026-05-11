@@ -4,7 +4,8 @@ export const jobs = [
      title: "Software Engineer",
      company: "Google",
      location: "Remote",
-     type: "Part-time"
+     type: "Part-time",
+     salary: 80000
     },
     
     {
@@ -12,7 +13,8 @@ export const jobs = [
       title: "Software Developer",
       company: "Microsoft",
       location: "New Jersey",
-      type: "Full-time"
+      type: "Full-time",
+      salary: 70000
     },
 
     {
@@ -20,7 +22,8 @@ export const jobs = [
       title: "Sr. Software Engineer",
       company: "Sony",
       location: "Remote",
-      type: "Full-time"
+      type: "Full-time",
+      salary: 90000
     },
 
     {
@@ -28,7 +31,8 @@ export const jobs = [
       title: "Game Developer",
       company: "Sony",
       location:"California",
-      type: "Contract"
+      type: "Contract",
+      salary: 50000
     },
 
     {
@@ -36,6 +40,7 @@ export const jobs = [
       title: "Junior Front-End Developer",
       company: "Meta",
       location: "New Jersey",
-      type: "Hybrid"
+      type: "Hybrid",
+      salary: 65000
     }
 ]; 

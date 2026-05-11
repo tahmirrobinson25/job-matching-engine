@@ -6,6 +6,7 @@ import {useState, useEffect} from "react";
         company: string;
         location: string;
         type: string;
+        salary: number;
         score: number;
     };
 
@@ -17,7 +18,8 @@ function App() {
     const [filters, setFilters] = useState({
         title: "",
         location: "",
-        type: ""
+        type: "",
+        salary: ""
     });
 
     //Calling jobs using async/await
@@ -45,7 +47,7 @@ function App() {
 
 const handleSubmit = async () => {
   try {
-    const response = await fetch(`http://localhost:3000/jobs?title=${filters.title}&location=${filters.location}&type=${filters.type}`)
+    const response = await fetch(`http://localhost:3000/jobs?title=${filters.title}&location=${filters.location}&type=${filters.type}&salary=${filters.salary}`)
 
     const data: Job[] = await response.json();
 
@@ -87,6 +89,11 @@ const handleSubmit = async () => {
                 onChange={(e) => setFilters({...filters, type: e.target.value})} style={{width:275}}/>
                 </div>
                 <div>
+                  <label>Enter Desired Salary: </label>
+                  <input type="number" value={filters.salary} placeholder="Ex. '80000'" 
+                  onChange={(e) => setFilters({...filters, salary: e.target.value})} style={{width:235}}/>
+                </div>
+                <div>
                 <button onClick={handleSubmit}>Search all jobs</button>
                 </div>
                 <div>
@@ -96,6 +103,7 @@ const handleSubmit = async () => {
                         <p >Company: {job.company}</p> {/*Comment*/}
                         <p>Location: {job.location}</p>
                         <p>Type: {job.type}</p>
+                        <p>Salary: {job.salary}</p>
                         <p>Score: {job.score}</p>
                         </div>
                     ))}
