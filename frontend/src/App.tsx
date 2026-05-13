@@ -1,16 +1,71 @@
-import {useState, useEffect} from "react";
+import { useEffect, useState } from 'react';
+import type { Job } from './types';
+import { SearchForm } from './components/SearchForm';
+import { JobList } from './components/JobList';
 
- type Job = {
-        id: number;
-        title: string;
-        company: string;
-        location: string;
-        type: string;
-        salary: number;
-        score: number;
+type Filters = {
+  title: string;
+  location: string;
+  type: string;
+  salary: string;
+};
+
+function App() {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [filters, setFilters] = useState<Filters>({
+    title: '',
+    location: '',
+    type: '',
+    salary: '',
+  });
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/jobs');
+        const data: Job[] = await response.json();
+        setJobs(data);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
+    fetchJobs();
+  }, []);
 
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/jobs?title=${filters.title}&location=${filters.location}&type=${filters.type}&salary=${filters.salary}`
+      );
+
+      const data: Job[] = await response.json();
+      setJobs(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <>
+      <header>
+        <h1>Job Matching Engine</h1>
+      </header>
+
+      <SearchForm
+        filters={filters}
+        setFilters={setFilters}
+        handleSubmit={handleSubmit}
+      />
+
+      <JobList jobs={jobs} />
+    </>
+  );
+}
+
+export default App;
+/* import {useState, useEffect} from "react";
+import type { Job } from "./types"
     
 function App() {
     //State stores data from backend
@@ -100,7 +155,7 @@ const handleSubmit = async () => {
                     {jobs.map((job) => (
                         <div key={job.id} >
                         <h3>{job.title}</h3>
-                        <p >Company: {job.company}</p> {/*Comment*/}
+                        <p >Company: {job.company}</p> 
                         <p>Location: {job.location}</p>
                         <p>Type: {job.type}</p>
                         <p>Salary: {job.salary}</p>
@@ -113,8 +168,4 @@ const handleSubmit = async () => {
         </>
         
     );
-}
-
-
-
-export default App;
+} */
