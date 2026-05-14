@@ -89,4 +89,4 @@ export const scoreSalary = (jobSalary :number, userSalary :number) =>  {
 
     return 0;
 
-}
+};
