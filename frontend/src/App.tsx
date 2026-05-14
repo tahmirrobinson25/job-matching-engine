@@ -10,8 +10,9 @@ type Filters = {
   salary: string;
 };
 
-function App() {
+const App = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const [filters, setFilters] = useState<Filters>({
     title: '',
     location: '',
@@ -27,6 +28,8 @@ function App() {
         setJobs(data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setHasLoadedOnce(true);
       }
     };
 
@@ -36,20 +39,30 @@ function App() {
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/jobs?title=${filters.title}&location=${filters.location}&type=${filters.type}&salary=${filters.salary}`
+        `http://localhost:3000/jobs?title=${encodeURIComponent(filters.title)}&location=${encodeURIComponent(filters.location)}&type=${encodeURIComponent(filters.type)}&salary=${encodeURIComponent(filters.salary)}`
       );
 
       const data: Job[] = await response.json();
       setJobs(data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setHasLoadedOnce(true);
     }
   };
 
   return (
-    <>
-      <header>
-        <h1>Job Matching Engine</h1>
+    <div className="mx-auto flex min-h-svh max-w-5xl flex-col px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+      <header className="mb-10 text-center sm:mb-12">
+        <p className="mb-2 text-xs font-medium uppercase tracking-widest text-violet-600 dark:text-violet-400">
+          Ranked opportunities
+        </p>
+        <h1 className="text-balance text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-4xl">
+          Job Matching Engine
+        </h1>
+        <p className="mx-auto mt-3 max-w-xl text-pretty text-sm text-zinc-600 dark:text-zinc-400">
+          Filter roles and compare match scores to focus applications where you fit best.
+        </p>
       </header>
 
       <SearchForm
@@ -58,114 +71,26 @@ function App() {
         handleSubmit={handleSubmit}
       />
 
-      <JobList jobs={jobs} />
-    </>
+      <section className="mt-10" aria-labelledby="results-heading">
+        <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <h2
+            id="results-heading"
+            className="text-lg font-medium text-zinc-900 dark:text-zinc-100"
+          >
+            Results
+          </h2>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            {!hasLoadedOnce
+              ? 'Loading…'
+              : jobs.length === 0
+                ? 'No listings yet'
+                : `${jobs.length} job${jobs.length === 1 ? '' : 's'}`}
+          </p>
+        </div>
+        <JobList jobs={jobs} hasLoadedOnce={hasLoadedOnce} />
+      </section>
+    </div>
   );
 }
 
 export default App;
-/* import {useState, useEffect} from "react";
-import type { Job } from "./types"
-    
-function App() {
-    //State stores data from backend
-    const [jobs,setJobs] = useState<Job[]> ([]);
-    const [filters, setFilters] = useState({
-        title: "",
-        location: "",
-        type: "",
-        salary: ""
-    });
-
-    //Calling jobs using async/await
-    useEffect(() => {
-    const  fetchJobs = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/jobs");
-      const data : Job[] = await response.json();
-
-      console.log("DATA FROM BACKEND:", data);
-      setJobs(data);
-    } catch (error :unknown) {
-      console.error(error);
-    }
-
-    
-  };
-
-  fetchJobs();
-}, []);
-
-    const handleClick = () => {
-    alert("Job submission successful");
-}
-
-const handleSubmit = async () => {
-  try {
-    const response = await fetch(`http://localhost:3000/jobs?title=${filters.title}&location=${filters.location}&type=${filters.type}&salary=${filters.salary}`)
-
-    const data: Job[] = await response.json();
-
-  console.log("Filters:", filters);
-  console.log("Response:", data);
-
-  setJobs(data);
-  }
-  catch (err: unknown) {
-    console.error(err)
-  }
-    
-  } 
-
-
-    //Display data
-    return (
-        
-        <>
-            <header>
-            <div>
-            <h1>Job Matching Engine</h1>
-            </div>
-            </header>
-            <div>
-                <div>
-                <label>Enter Job Title: </label>
-                <input type="text" value={filters.title} placeholder="Ex. 'Software Engineer'"
-                onChange={(e) => setFilters({...filters, title: e.target.value})} style={{width:275}} />
-                </div>
-                <div>
-                <label>Enter Location: </label>
-                <input type="text" value={filters.location} placeholder="Ex. 'New Jersey' or 'Remote'"
-                onChange={(e) => setFilters({...filters, location: e.target.value})} style={{width:275}}/>
-                </div>
-                <div>
-                <label>Enter Job Type: </label>
-                <input type="text" value={filters.type}  placeholder="Ex. 'Full-time', 'Part-time', 'Contract', 'Hybrid'"
-                onChange={(e) => setFilters({...filters, type: e.target.value})} style={{width:275}}/>
-                </div>
-                <div>
-                  <label>Enter Desired Salary: </label>
-                  <input type="number" value={filters.salary} placeholder="Ex. '80000'" 
-                  onChange={(e) => setFilters({...filters, salary: e.target.value})} style={{width:235}}/>
-                </div>
-                <div>
-                <button onClick={handleSubmit}>Search all jobs</button>
-                </div>
-                <div>
-                    {jobs.map((job) => (
-                        <div key={job.id} >
-                        <h3>{job.title}</h3>
-                        <p >Company: {job.company}</p> 
-                        <p>Location: {job.location}</p>
-                        <p>Type: {job.type}</p>
-                        <p>Salary: {job.salary}</p>
-                        <p>Score: {job.score}</p>
-                        </div>
-                    ))}
-                </div>
-                
-            </div>
-        </>
-        
-    );
-} */
