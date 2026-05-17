@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { Job } from './types';
 import { SearchForm } from './components/SearchForm';
-import { JobList } from './components/JobList';
+import { JobList } from './components/JobList'
+import { JobDetailModal } from './components/JobDetailModal';
 
 type Filters = {
   title: string;
@@ -10,7 +11,7 @@ type Filters = {
   salary: string;
 };
 
-const App = () => {
+function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
   const [filters, setFilters] = useState<Filters>({
@@ -19,6 +20,7 @@ const App = () => {
     type: '',
     salary: '',
   });
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -71,6 +73,10 @@ const App = () => {
         handleSubmit={handleSubmit}
       />
 
+      <JobDetailModal 
+      job={selectedJob}
+      onClose={() => setSelectedJob(null)} />
+
       <section className="mt-10" aria-labelledby="results-heading">
         <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
           <h2
@@ -87,7 +93,7 @@ const App = () => {
                 : `${jobs.length} job${jobs.length === 1 ? '' : 's'}`}
           </p>
         </div>
-        <JobList jobs={jobs} hasLoadedOnce={hasLoadedOnce} />
+        <JobList jobs={jobs} hasLoadedOnce={hasLoadedOnce} onSelectJob={setSelectedJob} />
       </section>
     </div>
   );
