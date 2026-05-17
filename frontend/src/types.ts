@@ -5,5 +5,6 @@
         location: string;
         type: string;
         salary: number;
+        description: string;
         score: number;
     };

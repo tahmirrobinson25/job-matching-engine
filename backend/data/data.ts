@@ -5,7 +5,8 @@ export const jobs = [
      company: "Google",
      location: "Remote",
      type: "Part-time",
-     salary: 80000
+     salary: 80000,
+     description: "description"
     },
     
     {
@@ -14,7 +15,8 @@ export const jobs = [
       company: "Microsoft",
       location: "New Jersey",
       type: "Full-time",
-      salary: 70000
+      salary: 70000,
+      description: "description"
     },
 
     {
@@ -23,7 +25,8 @@ export const jobs = [
       company: "Sony",
       location: "Remote",
       type: "Full-time",
-      salary: 90000
+      salary: 90000,
+      description: "description"
     },
 
     {
@@ -32,7 +35,8 @@ export const jobs = [
       company: "Sony",
       location:"California",
       type: "Contract",
-      salary: 50000
+      salary: 50000,
+      description: "description"
     },
 
     {
@@ -41,6 +45,7 @@ export const jobs = [
       company: "Meta",
       location: "New Jersey",
       type: "Hybrid",
-      salary: 65000
+      salary: 65000,
+      description: "description"
     }
 ]; 
