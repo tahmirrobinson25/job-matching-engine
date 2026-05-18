@@ -1,8 +1,9 @@
 //scoring functions and logical operations
+import { normalizeSynonyms } from './synonyms.ts'
 
 export const scoreTitle = (jobTitle :string , userTitle :string) => {
-  const job = jobTitle.toLowerCase();
-  const user = (userTitle || "").toLowerCase();
+  const job = normalizeSynonyms(jobTitle);
+  const user = normalizeSynonyms(userTitle || "");
 
   if (!userTitle) {
     return 0;
