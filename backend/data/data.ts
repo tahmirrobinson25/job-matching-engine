@@ -6,7 +6,7 @@ export const jobs = [
      location: "Remote",
      type: "Part-time",
      salary: 80000,
-     description: "description"
+     description: "Designs, builds, tests, and maintains software applications using modern programming languages and development tools. Collaborates with cross-functional teams to deliver scalable, reliable solutions and troubleshoot production issues"
     },
     
     {
@@ -16,7 +16,7 @@ export const jobs = [
       location: "New Jersey",
       type: "Full-time",
       salary: 70000,
-      description: "description"
+      description: "Develops and maintains software features, writes clean and efficient code, and fixes bugs. Works with databases, APIs, and user interfaces to deliver business applications and improve existing systems."
     },
 
     {
@@ -26,7 +26,7 @@ export const jobs = [
       location: "Remote",
       type: "Full-time",
       salary: 90000,
-      description: "description"
+      description: "Leads the design and implementation of complex software systems, mentors junior developers, and makes architectural decisions. Optimizes performance, reliability, and scalability across large applications."
     },
 
     {
@@ -36,7 +36,7 @@ export const jobs = [
       location:"California",
       type: "Contract",
       salary: 50000,
-      description: "description"
+      description: "Creates interactive video games by implementing gameplay systems, debugging performance issues, and integrating graphics, audio, and user input. Collaborates with designers and artists to deliver polished player experiences."
     },
 
     {
@@ -46,6 +46,6 @@ export const jobs = [
       location: "New Jersey",
       type: "Hybrid",
       salary: 65000,
-      description: "description"
+      description: "Builds responsive user interfaces using HTML, CSS, JavaScript, and React. Implements designs, integrates with backend APIs, and fixes front-end bugs while learning modern web development best practices."
     }
 ]; 

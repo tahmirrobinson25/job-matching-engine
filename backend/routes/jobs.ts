@@ -36,7 +36,7 @@ export const router = Router();
       return {...job, score};
     });
 
-    const filteredJobs = scoredJobs.filter((job => job.score > 0))
+    const filteredJobs = scoredJobs.filter(job => job.score > 0);
 
     const sortedJobs = filteredJobs.sort((a, b) => {
 
