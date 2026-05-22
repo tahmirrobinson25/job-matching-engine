@@ -4,6 +4,21 @@ import { jobs } from '../data/data.ts';
 import type { Request, Response } from 'express';
 
 export const router = Router();
+
+  router.get('/:id', (req, res) => {
+  const jobId = Number(req.params.id);
+
+  const job = jobs.find((job) => job.id === jobId);
+  
+  if (!job) {
+    return res.status(404).json({ error: 'Job not found' });
+  }
+
+  res.json(job);
+});
+
+
+
  router.get('/',  (req :Request, res :Response) => {
     let filterJobs = jobs;
 

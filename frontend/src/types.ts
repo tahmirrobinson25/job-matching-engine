@@ -5,6 +5,14 @@
         location: string;
         type: string;
         salary: number;
+        skills: string[];
         description: string;
-        score: number;
+        score?: number;
     };
+
+    export  type Filters = {
+    title: string;
+    location: string;
+    type: string;
+    salary: string;
+};

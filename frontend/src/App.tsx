@@ -1,4 +1,19 @@
-import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router';
+import { JobSearchPage } from './pages/JobSearchPage';
+import { JobDetailPage } from './pages/JobDetailsPage';
+
+function App() {
+  return (
+      <Routes>
+        <Route path="/" element={<JobSearchPage />} />
+        <Route path="/jobs/:id" element={<JobDetailPage />} />
+      </Routes>
+  );
+}
+
+export default App;
+
+/*import { useEffect, useState } from 'react';
 import type { Job } from './types';
 import { SearchForm } from './components/SearchForm';
 import { JobList } from './components/JobList'
@@ -99,4 +114,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; */

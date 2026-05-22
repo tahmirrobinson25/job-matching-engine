@@ -4,10 +4,9 @@ import type { Job } from '../types';
 type JobListProps = {
   jobs: Job[];
   hasLoadedOnce: boolean;
-  onSelectJob: (job: Job) => void;
 };
 
-export const JobList = ({ jobs, hasLoadedOnce, onSelectJob }: JobListProps) => {
+export const JobList = ({ jobs, hasLoadedOnce, }: JobListProps) => {
   if (jobs.length === 0 && !hasLoadedOnce) {
     return (
       <div
@@ -41,7 +40,7 @@ export const JobList = ({ jobs, hasLoadedOnce, onSelectJob }: JobListProps) => {
     <ul className="grid list-none gap-4 p-0 sm:grid-cols-2">
       {jobs.map((job) => (
         <li key={job.id}>
-          <JobCard job={job} onSelectJob={onSelectJob}/>
+          <JobCard job={job}/>
         </li>
       ))}
     </ul>
