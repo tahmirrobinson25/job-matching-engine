@@ -1,23 +1,42 @@
 import { Router } from 'express';
 import { scoreTitle, scoreLocation, scoreType, scoreSalary } from '../logic/utils.ts';
-import { jobs } from '../data/data.ts';
 import type { Request, Response } from 'express';
+import { pool } from '../src/db/connection.ts';
+import { jobs } from '../src/db/seed.ts';
 
 export const router = Router();
 
-  router.get('/:id', (req, res) => {
+  router.get('/:id', async (req, res) => {
+  try {
   const jobId = Number(req.params.id);
 
-  const job = jobs.find((job) => job.id === jobId);
-  
+  const result = await pool.query(
+    `
+  SELECT *
+  FROM jobs
+  WHERE id=$1
+  `,
+  [jobId]
+  );
+
+  const job = result.rows[0];
+
   if (!job) {
-    return res.status(404).json({ error: 'Job not found' });
+    return res.status(404).json({
+      error: 'Job not found'
+    });
   }
 
   res.json(job);
-});
+  }
+  catch (error) {
+    console.error(error);
 
-
+    res.status(500).json({
+      error: 'Server error'
+    });
+  }
+  });
 
  router.get('/',  (req :Request, res :Response) => {
     let filterJobs = jobs;
@@ -47,7 +66,11 @@ export const router = Router();
       const scoredLocation = scoreLocation(job.location, location) * weights.location;
       const scoredType = scoreType(job.type, type) * weights.type;
       const scoredSalary = scoreSalary(job.salary, salary) * weights.salary;
-      const score = scoredTitle + scoredLocation + scoredType + scoredSalary;
+      const score = 
+      scoredTitle + 
+      scoredLocation + 
+      scoredType + 
+      scoredSalary;
       return {...job, score};
     });
 
