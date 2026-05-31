@@ -26,7 +26,12 @@ export const JobSearchPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/jobs?title=${encodeURIComponent(filters.title)}&location=${encodeURIComponent(filters.location)}&type=${encodeURIComponent(filters.type)}&salary=${encodeURIComponent(filters.salary)}`
+        `http://localhost:3000/jobs?
+        title=${encodeURIComponent(filters.title)}
+        &location=${encodeURIComponent(filters.location)}
+        &type=${encodeURIComponent(filters.type)}
+        &salary=${encodeURIComponent(filters.salary)}
+        &company=`
       );
 
       if (!response.ok) {

@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { scoreTitle, scoreLocation, scoreType, scoreSalary } from '../logic/utils.ts';
 import type { Request, Response } from 'express';
 import { pool } from '../src/db/connection.ts';
-import { jobs } from '../src/db/seed.ts';
 
 export const router = Router();
 
@@ -38,14 +37,65 @@ export const router = Router();
   }
   });
 
- router.get('/',  (req :Request, res :Response) => {
-    let filterJobs = jobs;
+ router.get('/', async(req :Request, res :Response) => {
+    //const location = (req.query.location as string).trim();
+    //const type = (req.query.type as string).trim();
+    const salary = Number(req.query.salary);
 
-    const location = req.query.location as string;
+    const type =
+  typeof req.query.type === 'string'
+    ? req.query.type.trim()
+    : '';
+
+    const location =
+  typeof req.query.location === 'string'
+    ? req.query.location.trim()
+    : '';
+
+    console.log({
+  location,
+  type,
+  salary
+  });
+
+  let query =
+  `
+  SELECT *
+  FROM jobs
+  `
+
+  const conditions: string[] = [];
+  const values: (string | number)[] = [];
+
+  if (location) {
+    conditions.push(`LOWER(location) = LOWER($${values.length +1})`);
+    values.push(location);
+  }
+
+  if (type) {
+    conditions.push(`LOWER(type) = LOWER($${values.length + 1})`);
+    values.push(type);
+  }
+
+  if (!Number.isNaN(salary)) {
+    conditions.push(`salary >= $${values.length + 1}`);
+    values.push(salary);
+  }
+
+  if (conditions.length > 0) {
+    query +=` WHERE ${conditions.join(' AND ')} `;
+  }
+
+  console.log(query);
+  console.log(values);
+
+    const result = await pool.query(query, values);
+
+    let filterJobs = result.rows;
+    
     const title = req.query.title as string;
     const company = req.query.company as string;
-    const type = req.query.type as string;
-    const salary = Number(req.query.salary);
+   
 
     const weights = {
       title: 5,
@@ -74,9 +124,9 @@ export const router = Router();
       return {...job, score};
     });
 
-    const filteredJobs = scoredJobs.filter(job => job.score > 0);
+    //const filteredJobs = scoredJobs.filter(job => job.score > 0);
 
-    const sortedJobs = filteredJobs.sort((a, b) => {
+    const sortedJobs = scoredJobs.sort((a, b) => {
 
       return b.score - a.score;
 

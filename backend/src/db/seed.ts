@@ -86,5 +86,3 @@ export const seedJobs = async () => {
         await pool.end();
     }
 };
-
-seedJobs();
