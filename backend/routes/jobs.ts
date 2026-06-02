@@ -41,6 +41,8 @@ export const router = Router();
     //const location = (req.query.location as string).trim();
     //const type = (req.query.type as string).trim();
     const salary = Number(req.query.salary);
+    const page = Number(req.query.page) || 1;
+    
 
     const type =
   typeof req.query.type === 'string'
@@ -63,9 +65,11 @@ export const router = Router();
   SELECT *
   FROM jobs
   `
-
+  
   const conditions: string[] = [];
   const values: (string | number)[] = [];
+
+  
 
   if (location) {
     conditions.push(`LOWER(location) = LOWER($${values.length +1})`);
@@ -85,6 +89,11 @@ export const router = Router();
   if (conditions.length > 0) {
     query +=` WHERE ${conditions.join(' AND ')} `;
   }
+
+  const limit = 10;
+  const offset = (page - 1) * limit;
+  query += ` LIMIT ${limit} OFFSET ${offset}`
+  
 
   console.log(query);
   console.log(values);
