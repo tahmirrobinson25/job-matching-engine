@@ -54,7 +54,187 @@ export const jobs = [
       salary: 65000,
       //skills: ["HTML", "CSS", "JavaScript", "Web Technologies", "node.js"],
       description: "Builds responsive user interfaces using HTML, CSS, JavaScript, and React. Implements designs, integrates with backend APIs, and fixes front-end bugs while learning modern web development best practices."
-    }
+    },
+
+    {
+  title: "Backend Developer",
+  company: "Amazon",
+  location: "Remote",
+  type: "Full-time",
+  salary: 95000,
+  description: "Builds and maintains server-side applications, APIs, and database integrations. Focuses on scalability, security, and performance while supporting business-critical services."
+},
+
+{
+  title: "Frontend Developer",
+  company: "Netflix",
+  location: "California",
+  type: "Full-time",
+  salary: 90000,
+  description: "Develops responsive web interfaces using modern JavaScript frameworks. Works closely with designers and backend engineers to create engaging user experiences."
+},
+
+{
+  title: "Full Stack Developer",
+  company: "Spotify",
+  location: "Remote",
+  type: "Full-time",
+  salary: 105000,
+  description: "Designs and develops both frontend and backend features. Collaborates across teams to deliver complete web applications from concept to deployment."
+},
+
+{
+  title: "Junior Software Engineer",
+  company: "IBM",
+  location: "New Jersey",
+  type: "Hybrid",
+  salary: 65000,
+  description: "Assists in developing software solutions, fixing bugs, and implementing new features while gaining experience with enterprise development practices."
+},
+
+{
+  title: "Technical Support Engineer",
+  company: "Amplify",
+  location: "Remote",
+  type: "Full-time",
+  salary: 70000,
+  description: "Investigates technical issues, troubleshoots software problems, and partners with engineering teams to resolve customer-facing incidents."
+},
+
+{
+  title: "DevOps Engineer",
+  company: "Oracle",
+  location: "Texas",
+  type: "Full-time",
+  salary: 115000,
+  description: "Automates deployment pipelines, manages cloud infrastructure, and improves system reliability through monitoring and continuous integration practices."
+},
+
+{
+  title: "QA Automation Engineer",
+  company: "Salesforce",
+  location: "Remote",
+  type: "Full-time",
+  salary: 85000,
+  description: "Creates automated test suites, validates software quality, and collaborates with developers to ensure reliable releases."
+},
+
+{
+  title: "Web Developer",
+  company: "Adobe",
+  location: "Florida",
+  type: "Contract",
+  salary: 75000,
+  description: "Builds and maintains websites, integrates APIs, and optimizes performance while ensuring cross-browser compatibility."
+},
+
+{
+  title: "Software Engineer I",
+  company: "Cisco",
+  location: "North Carolina",
+  type: "Full-time",
+  salary: 80000,
+  description: "Contributes to software projects by implementing features, fixing defects, and participating in code reviews and agile development processes."
+},
+
+{
+  title: "Cloud Engineer",
+  company: "Microsoft",
+  location: "Remote",
+  type: "Full-time",
+  salary: 120000,
+  description: "Designs, deploys, and manages cloud-based solutions while improving infrastructure scalability, security, and availability."
+},
+
+{
+  title: "React Developer",
+  company: "Meta",
+  location: "Remote",
+  type: "Contract",
+  salary: 85000,
+  description: "Builds interactive user interfaces using React and TypeScript while integrating backend APIs and optimizing application performance."
+},
+
+{
+  title: "Systems Engineer",
+  company: "Lockheed Martin",
+  location: "Virginia",
+  type: "Full-time",
+  salary: 95000,
+  description: "Designs and supports complex systems, ensuring hardware and software components operate together efficiently."
+},
+
+{
+  title: "Application Developer",
+  company: "Capital One",
+  location: "Hybrid",
+  type: "Full-time",
+  salary: 90000,
+  description: "Develops internal and customer-facing applications while maintaining software quality and business functionality."
+},
+
+{
+  title: "Software Consultant",
+  company: "Accenture",
+  location: "Remote",
+  type: "Contract",
+  salary: 100000,
+  description: "Works with clients to design software solutions, gather requirements, and implement technology improvements."
+},
+
+{
+  title: "Data Engineer",
+  company: "Snowflake",
+  location: "Remote",
+  type: "Full-time",
+  salary: 125000,
+  description: "Builds and maintains data pipelines, optimizes storage systems, and supports analytics initiatives."
+},
+
+{
+  title: "Platform Engineer",
+  company: "Atlassian",
+  location: "Remote",
+  type: "Full-time",
+  salary: 115000,
+  description: "Develops internal platforms and infrastructure services that improve developer productivity and operational efficiency."
+},
+
+{
+  title: "Mobile Developer",
+  company: "Uber",
+  location: "California",
+  type: "Full-time",
+  salary: 110000,
+  description: "Creates and maintains mobile applications, implements new features, and improves app stability and performance."
+},
+
+{
+  title: "Entry-Level Software Developer",
+  company: "Dell",
+  location: "Texas",
+  type: "Hybrid",
+  salary: 60000,
+  description: "Supports software development efforts through coding, testing, debugging, and documentation while learning enterprise workflows."
+},
+
+{
+  title: "Site Reliability Engineer",
+  company: "Google",
+  location: "Remote",
+  type: "Full-time",
+  salary: 130000,
+  description: "Improves system reliability, monitors production environments, and automates operational processes."
+},
+
+{
+  title: "Java Developer",
+  company: "JPMorgan Chase",
+  location: "New Jersey",
+  type: "Full-time",
+  salary: 95000,
+  description: "Develops enterprise applications using Java and related technologies while supporting financial systems and services."
+},
 
 ];
 
@@ -86,3 +266,5 @@ export const seedJobs = async () => {
         await pool.end();
     }
 };
+
+seedJobs();

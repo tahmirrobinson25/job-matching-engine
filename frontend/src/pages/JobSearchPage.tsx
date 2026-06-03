@@ -18,68 +18,54 @@ export const JobSearchPage = () => {
 
     const [error, setError] = useState('');
 
-    const handleSubmit = async () => {
+    const [page, setPage] = useState(1);
 
-    setLoading(true);
+    const fetchJobs = async () => {
+        setLoading(true);
+        setError('');
 
-    setError('');
+        try {
+            const response = await fetch(
+            `http://localhost:3000/jobs?
+            title=${encodeURIComponent(filters.title)}
+            &location=${encodeURIComponent(filters.location)}
+            &type=${encodeURIComponent(filters.type)}
+            &salary=${encodeURIComponent(filters.salary)}
+            &page=${page}
+            &company=`
+            );
 
-    try {
-      const response = await fetch(
-        `http://localhost:3000/jobs?
-        title=${encodeURIComponent(filters.title)}
-        &location=${encodeURIComponent(filters.location)}
-        &type=${encodeURIComponent(filters.type)}
-        &salary=${encodeURIComponent(filters.salary)}
-        &company=`
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch jobs");
-      }
-
-      const data: Job[] = await response.json();
-      setJobs(data);
-    } catch (err) {
-      console.error(err);
-
-      setError("Error loading jobs");
-    } finally {
-      setLoading(false);
-        
-      setHasLoadedOnce(true);    
-    }
-  };
-
-    useEffect(() => {
-        const fetchJobs = async () => {
-            setLoading(true);
-
-            setError('');
-
-            try {
-                const response = await fetch('http://localhost:3000/jobs')
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch jobs.");
-                }
-
-                const data: Job[] = await response.json();
-
-                setJobs(data);
-            } catch (error) {
-                console.error(error)
-
-                setError("Error loading jobs.")
-            } finally {
-                
-                setLoading(false);
-                setHasLoadedOnce(true);
+            if (!response.ok) {
+            throw new Error('Failed to fetch jobs');
             }
+
+            const data: Job[] = await response.json();
+
+            setJobs(data);
+        } catch (error) {
+            console.error(error);
+            setError('Error loading jobs');
+        } finally {
+            setLoading(false);
+            setHasLoadedOnce(true);
+        }
         };
 
-        fetchJobs();
-    }, []);
+    useEffect(() => {
+    fetchJobs();
+    }, [page]); 
+
+    const handleSubmit = async () => {
+  setPage(1);
+
+  if (page === 1) {
+    fetchJobs();
+  }
+};
+
+const handlePageChange = (newPage: number) => {
+  setPage(newPage);
+};
 
     return (
         <div className="mx-auto flex min-h-svh max-w-5xl flex-col px-4 pb-16 pt-8 sm:px-6 lg:px-8">
@@ -130,9 +116,31 @@ export const JobSearchPage = () => {
                 {!loading && !error && (
                     <JobList jobs={jobs} hasLoadedOnce={hasLoadedOnce} />
                 )}
-                
 
+                <div className="mx-auto flex items-center justify-center">
+                <button
+                className="mt-4 inline-flex h-10 shrink-0 items-center justify-center rounded-lg bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 active:scale-[0.98] dark:bg-violet-500 dark:hover:bg-violet-400 dark:focus-visible:outline-violet-400 sm:mt-0"
+                id="previous-btn"
+                onClick={() => {
+                    if (page > 1) {
+                        handlePageChange(page -1);
+                    }
+                }}
+                >Previous</button>
+                <span>Page {page}</span>
+                <button
+                className="mt-4 inline-flex h-10 shrink-0 items-center justify-center rounded-lg bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 active:scale-[0.98] dark:bg-violet-500 dark:hover:bg-violet-400 dark:focus-visible:outline-violet-400 sm:mt-0"
+                id="next-btn"
+                onClick={() => {
+                    if (page > 0) {
+                        handlePageChange(page + 1);
+                    }
+                }}
+                >Next</button>
+                </div>
             </section>
+
+
         </div>
     )
-}
+};

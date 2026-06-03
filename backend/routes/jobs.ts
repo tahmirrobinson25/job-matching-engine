@@ -42,7 +42,7 @@ export const router = Router();
     //const type = (req.query.type as string).trim();
     const salary = Number(req.query.salary);
     const page = Number(req.query.page) || 1;
-    
+    console.log(page);
 
     const type =
   typeof req.query.type === 'string'
@@ -69,7 +69,6 @@ export const router = Router();
   const conditions: string[] = [];
   const values: (string | number)[] = [];
 
-  
 
   if (location) {
     conditions.push(`LOWER(location) = LOWER($${values.length +1})`);
@@ -132,8 +131,6 @@ export const router = Router();
       scoredSalary;
       return {...job, score};
     });
-
-    //const filteredJobs = scoredJobs.filter(job => job.score > 0);
 
     const sortedJobs = scoredJobs.sort((a, b) => {
 
