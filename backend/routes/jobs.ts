@@ -38,9 +38,12 @@ export const router = Router();
   });
 
  router.get('/', async(req :Request, res :Response) => {
-    //const location = (req.query.location as string).trim();
-    //const type = (req.query.type as string).trim();
-    const salary = Number(req.query.salary);
+  try {
+    const salaryParam = req.query.salary;
+    const salary =
+      typeof salaryParam === 'string' && salaryParam.trim() !== ''
+        ? Number(salaryParam)
+        : NaN;
     const page = Number(req.query.page) || 1;
     console.log(page);
 
@@ -53,12 +56,6 @@ export const router = Router();
   typeof req.query.location === 'string'
     ? req.query.location.trim()
     : '';
-
-    console.log({
-  location,
-  type,
-  salary
-  });
 
   let query =
   `
@@ -85,17 +82,22 @@ export const router = Router();
     values.push(salary);
   }
 
-  if (conditions.length > 0) {
-    query +=` WHERE ${conditions.join(' AND ')} `;
-  }
+  const whereClause =
+    conditions.length > 0 ? ` WHERE ${conditions.join(' AND ')}` : '';
 
   const limit = 10;
   const offset = (page - 1) * limit;
-  query += ` LIMIT ${limit} OFFSET ${offset}`
-  
 
-  console.log(query);
-  console.log(values);
+  const countResult = await pool.query(
+    `SELECT COUNT(*)::int AS count FROM jobs${whereClause}`,
+    values
+  );
+  const totalJobs = countResult.rows[0].count;
+  const totalPages = Math.max(1, Math.ceil(totalJobs / limit));
+
+  query += whereClause;
+  query += ` LIMIT ${limit} OFFSET ${offset}`;
+
 
     const result = await pool.query(query, values);
 
@@ -141,6 +143,13 @@ export const router = Router();
 
     
 
-
-    res.json(sortedJobs);
+    res.json({
+      jobs: sortedJobs,
+      totalPages,
+      totalJobs,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
 });

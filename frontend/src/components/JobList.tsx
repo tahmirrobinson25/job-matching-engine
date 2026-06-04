@@ -4,10 +4,19 @@ import type { Job } from '../types';
 type JobListProps = {
   jobs: Job[];
   hasLoadedOnce: boolean;
+  loading: boolean;
+  error: string;
+  showEmptyState: boolean;
 };
 
-export const JobList = ({ jobs, hasLoadedOnce, }: JobListProps) => {
-  if (jobs.length === 0 && !hasLoadedOnce) {
+export const JobList = ({
+  jobs,
+  hasLoadedOnce,
+  loading,
+  error,
+  showEmptyState,
+}: JobListProps) => {
+  if (!hasLoadedOnce || loading) {
     return (
       <div
         className="rounded-xl border border-zinc-200 bg-white px-6 py-14 text-center dark:border-zinc-800 dark:bg-zinc-900/40"
@@ -19,14 +28,18 @@ export const JobList = ({ jobs, hasLoadedOnce, }: JobListProps) => {
     );
   }
 
-  if (jobs.length === 0) {
+  if (showEmptyState) {
     return (
       <div className="rounded-xl border border-dashed border-zinc-300 bg-zinc-50/80 px-6 py-14 text-center dark:border-zinc-700 dark:bg-zinc-900/30">
         <p className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-          No jobs match these filters yet.
+          {error
+            ? 'Could not load jobs from the API.'
+            : 'No jobs match these filters yet.'}
         </p>
         <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-          Try broadening title or location, or confirm the API is running on{' '}
+          {error
+            ? 'Confirm the backend is running on'
+            : 'Try broadening title or location, or confirm the API is running on'}{' '}
           <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-xs text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
             localhost:3000
           </code>
