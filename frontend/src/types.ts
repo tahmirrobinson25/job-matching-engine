@@ -10,9 +10,14 @@
         score?: number;
     };
 
-    export  type Filters = {
+    export type Filters = {
     title: string;
     location: string;
     type: string;
     salary: string;
 };
+
+export type SearchState = {
+    filters: Filters;
+    page: number;
+}

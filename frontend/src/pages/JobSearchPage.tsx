@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import type { Job, Filters } from '../types';
+import type { Job, Filters, SearchState } from '../types';
 import { SearchForm } from '../components/SearchForm';
 import { JobList } from '../components/JobList';
+import { useLocation } from 'react-router-dom';
 
 type JobsApiResponse =
     | Job[]
@@ -28,10 +29,14 @@ function parseJobsResponse(data: JobsApiResponse, page: number, pageSize = 10) {
 }
 
 export const JobSearchPage = () => {
+    const location = useLocation();
+    const previousState = location.state as SearchState | undefined;
+
     const [jobs, setJobs] = useState<Job[]>([]);
     const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
 
-    const [filters, setFilters] = useState<Filters>({
+    const [filters, setFilters] = useState<Filters>( 
+        previousState?.filters ?? {
         title: '',
         location: '',
         type: '',
@@ -42,10 +47,14 @@ export const JobSearchPage = () => {
 
     const [error, setError] = useState('');
 
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(
+        previousState?.page ?? 1
+    );
 
     const [totalPages, setTotalPages] = useState(1);
     const [totalJobs, setTotalJobs] = useState(0);
+
+    
 
     const fetchJobs = async () => {
         setLoading(true);
@@ -97,6 +106,11 @@ const handlePageChange = (newPage: number) => {
 const hasResults = totalJobs > 0;
 const showEmptyState = hasLoadedOnce && !loading && jobs.length === 0;
 
+const searchState = {
+    filters,
+    page,
+}
+
     return (
         <div className="mx-auto flex min-h-svh max-w-5xl flex-col px-4 pb-16 pt-8 sm:px-6 lg:px-8">
             <header className="mb-10 text-center sm:mb-12">
@@ -145,6 +159,7 @@ const showEmptyState = hasLoadedOnce && !loading && jobs.length === 0;
                     loading={loading}
                     error={error}
                     showEmptyState={showEmptyState}
+                    searchState={searchState}
                 />
 
                 {hasLoadedOnce && !loading && hasResults && (

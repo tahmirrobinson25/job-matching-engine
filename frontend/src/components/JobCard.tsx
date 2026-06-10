@@ -1,8 +1,9 @@
-import type { Job } from '../types';
+import type { Job, SearchState } from '../types';
 import { Link } from 'react-router';
 
 type JobCardProps = {
   job: Job;
+  searchState: SearchState;
 };
 
 function formatSalary(value: number) {
@@ -14,7 +15,7 @@ function formatSalary(value: number) {
   }).format(value);
 }
 
-export const JobCard = ({ job }: JobCardProps) => {
+export const JobCard = ({ job, searchState }: JobCardProps) => {
   const scoreLabel =
     typeof job.score === 'number' && !Number.isNaN(job.score)
       ? job.score.toFixed(1)
@@ -69,6 +70,7 @@ export const JobCard = ({ job }: JobCardProps) => {
       <div className="mt-5 flex flex-wrap gap-2 border-t border-zinc-100 pt-4 dark:border-zinc-800">
         <Link
         to={`/jobs/${job.id}`}
+        state={searchState}
         className="inline-flex h-9 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 px-3 text-sm font-medium text-zinc-800 transition hover:bg-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700 dark:focus-visible:outline-violet-400"
         >
           View Details

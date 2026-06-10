@@ -1,5 +1,5 @@
 import { JobCard } from './JobCard';
-import type { Job } from '../types';
+import type { Job, SearchState } from '../types';
 
 type JobListProps = {
   jobs: Job[];
@@ -7,6 +7,7 @@ type JobListProps = {
   loading: boolean;
   error: string;
   showEmptyState: boolean;
+  searchState: SearchState;
 };
 
 export const JobList = ({
@@ -15,6 +16,7 @@ export const JobList = ({
   loading,
   error,
   showEmptyState,
+  searchState,
 }: JobListProps) => {
   if (!hasLoadedOnce || loading) {
     return (
@@ -53,7 +55,10 @@ export const JobList = ({
     <ul className="grid list-none gap-4 p-0 sm:grid-cols-2">
       {jobs.map((job) => (
         <li key={job.id}>
-          <JobCard job={job}/>
+          <JobCard 
+          job={job}
+          searchState={searchState}
+          />
         </li>
       ))}
     </ul>
