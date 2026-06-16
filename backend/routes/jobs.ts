@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { scoreTitle, scoreLocation, scoreType, scoreSalary } from '../logic/utils.ts';
 import type { Request, Response } from 'express';
-import { pool } from '../src/db/connection.ts';
+import { Prisma } from '@prisma/client';
+import { prisma } from '../src/lib/prisma.ts'
 
 export const router = Router();
 
@@ -9,16 +10,11 @@ export const router = Router();
   try {
   const jobId = Number(req.params.id);
 
-  const result = await pool.query(
-    `
-  SELECT *
-  FROM jobs
-  WHERE id=$1
-  `,
-  [jobId]
-  );
-
-  const job = result.rows[0];
+  const job = await prisma.jobs.findUnique({
+    where: {
+      id: jobId
+    }
+  });
 
   if (!job) {
     return res.status(404).json({
@@ -45,7 +41,7 @@ export const router = Router();
         ? Number(salaryParam)
         : NaN;
     const page = Number(req.query.page) || 1;
-    console.log(page);
+
 
     const type =
   typeof req.query.type === 'string'
@@ -56,55 +52,65 @@ export const router = Router();
   typeof req.query.location === 'string'
     ? req.query.location.trim()
     : '';
+    
+  const title = req.query.title as string;
 
-  let query =
-  `
-  SELECT *
-  FROM jobs
-  `
-  
-  const conditions: string[] = [];
-  const values: (string | number)[] = [];
+  const company = req.query.company as string;
 
+  const where: Prisma.jobsWhereInput = {};
+
+  if (title) {
+    where.title = {
+      contains: title,
+      mode: 'insensitive'
+    };
+  }
 
   if (location) {
-    conditions.push(`LOWER(location) = LOWER($${values.length +1})`);
-    values.push(location);
+    where.location = {
+      equals: location,
+      mode: 'insensitive'
+    };
   }
 
   if (type) {
-    conditions.push(`LOWER(type) = LOWER($${values.length + 1})`);
-    values.push(type);
+    where.type = {
+      equals: type,
+      mode: 'insensitive'
+    };
   }
 
   if (!Number.isNaN(salary)) {
-    conditions.push(`salary >= $${values.length + 1}`);
-    values.push(salary);
+    where.salary = {
+      gte: salary
+    };
   }
 
-  const whereClause =
-    conditions.length > 0 ? ` WHERE ${conditions.join(' AND ')}` : '';
+  if (company) {
+    where.company = {
+      equals: company,
+      mode: 'insensitive'
+    }
+  }
+
 
   const limit = 10;
   const offset = (page - 1) * limit;
 
-  const countResult = await pool.query(
-    `SELECT COUNT(*)::int AS count FROM jobs${whereClause}`,
-    values
-  );
-  const totalJobs = countResult.rows[0].count;
+  const totalJobs = await prisma.jobs.count({
+    where
+  });
+
+  
   const totalPages = Math.max(1, Math.ceil(totalJobs / limit));
 
-  query += whereClause;
-  query += ` LIMIT ${limit} OFFSET ${offset}`;
 
 
-    const result = await pool.query(query, values);
-
-    let filterJobs = result.rows;
-    
-    const title = req.query.title as string;
-    const company = req.query.company as string;
+    const filterJobs = await prisma.jobs.findMany({
+      where,
+      skip: offset,
+      take: limit
+    })
    
 
     const weights = {
@@ -114,18 +120,11 @@ export const router = Router();
       salary: 4
     };
 
-    if (company) {
-      filterJobs = filterJobs.filter((job) =>
-      job.company.toLowerCase() === company.toLowerCase()
-      );
-    };
-
-
      const scoredJobs = filterJobs.map((job) => {
       const scoredTitle = scoreTitle(job.title, title) * weights.title;
-      const scoredLocation = scoreLocation(job.location, location) * weights.location;
+      const scoredLocation = scoreLocation(job.location ?? "", location) * weights.location;
       const scoredType = scoreType(job.type, type) * weights.type;
-      const scoredSalary = scoreSalary(job.salary, salary) * weights.salary;
+      const scoredSalary = scoreSalary(job.salary ?? 0, salary) * weights.salary;
       const score = 
       scoredTitle + 
       scoredLocation + 
