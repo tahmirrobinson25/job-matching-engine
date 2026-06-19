@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { scoreTitle, scoreLocation, scoreType, scoreSalary } from '../logic/utils.ts';
 import type { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
-import { prisma } from '../src/lib/prisma.ts'
+import { prisma } from '../src/lib/prisma.ts';
+import type { jobs as Job } from '@prisma/client'
 
 export const router = Router();
 
@@ -120,10 +121,14 @@ export const router = Router();
       salary: 4
     };
 
-     const scoredJobs = filterJobs.map((job) => {
+    type ScoredJob = Job & {
+      score: number
+    };
+
+     const scoredJobs  :ScoredJob[] = filterJobs.map((job : Job) => {
       const scoredTitle = scoreTitle(job.title, title) * weights.title;
       const scoredLocation = scoreLocation(job.location ?? "", location) * weights.location;
-      const scoredType = scoreType(job.type, type) * weights.type;
+      const scoredType = scoreType(job.type,type) * weights.type;
       const scoredSalary = scoreSalary(job.salary ?? 0, salary) * weights.salary;
       const score = 
       scoredTitle + 
@@ -133,7 +138,7 @@ export const router = Router();
       return {...job, score};
     });
 
-    const sortedJobs = scoredJobs.sort((a, b) => {
+    const sortedJobs = scoredJobs.sort((a :ScoredJob, b :ScoredJob) => {
 
       return b.score - a.score;
 
