@@ -7,7 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model jobs {
+model Job {
   id          Int     @id @default(autoincrement())
   title       String  @db.VarChar(100)
   company     String  @db.VarChar(50)
@@ -15,4 +15,15 @@ model jobs {
   salary      Int?
   type        String  @db.VarChar(50)
   description String?
+
+  @@map("jobs")
+}
+
+model User {
+  id      Int @id @default(autoincrement())
+  email   String  @unique
+  password String
+  createdAt DateTime @default(now())
+
+  @@map("users")
 }

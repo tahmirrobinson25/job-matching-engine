@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { scoreTitle, scoreLocation, scoreType, scoreSalary } from '../logic/utils.ts';
 import type { Request, Response } from 'express';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../src/generated/prisma/client.ts';
 import { prisma } from '../src/lib/prisma.ts';
-import type { jobs as Job } from '@prisma/client'
+import type { Job } from '../src/generated/prisma/client.ts';
 
 export const router = Router();
 
@@ -11,7 +11,7 @@ export const router = Router();
   try {
   const jobId = Number(req.params.id);
 
-  const job = await prisma.jobs.findUnique({
+  const job = await prisma.job.findUnique({
     where: {
       id: jobId
     }
@@ -58,7 +58,7 @@ export const router = Router();
 
   const company = req.query.company as string;
 
-  const where: Prisma.jobsWhereInput = {};
+  const where: Prisma.JobWhereInput = {};
 
   if (title) {
     where.title = {
@@ -98,7 +98,7 @@ export const router = Router();
   const limit = 10;
   const offset = (page - 1) * limit;
 
-  const totalJobs = await prisma.jobs.count({
+  const totalJobs = await prisma.job.count({
     where
   });
 
@@ -107,7 +107,7 @@ export const router = Router();
 
 
 
-    const filterJobs = await prisma.jobs.findMany({
+    const filterJobs = await prisma.job.findMany({
       where,
       skip: offset,
       take: limit
