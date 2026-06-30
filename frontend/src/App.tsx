@@ -1,12 +1,16 @@
-import { BrowserRouter, Routes, Route } from 'react-router';
+import { Routes, Route } from 'react-router-dom';
 import { JobSearchPage } from './pages/JobSearchPage';
 import { JobDetailPage } from './pages/JobDetailsPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { LoginPage } from './pages/LoginPage';
 
 function App() {
   return (
       <Routes>
         <Route path="/" element={<JobSearchPage />} />
         <Route path="/jobs/:id" element={<JobDetailPage />} />
+        <Route path="/register" element={<RegisterPage/>} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
   );
 }
