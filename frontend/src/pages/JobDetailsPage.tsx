@@ -1,7 +1,7 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation} from 'react-router-dom';
 import type { Job, SearchState } from '../types';
 import {useEffect, useState} from 'react';
-import { useLocation } from 'react-router-dom';
+import {  } from 'react-router-dom';
 
 export const JobDetailPage = () => {
     const { id } = useParams();

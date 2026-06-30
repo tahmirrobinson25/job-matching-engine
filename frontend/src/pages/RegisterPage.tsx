@@ -1,0 +1,143 @@
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
+
+export const RegisterPage = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [ showPassword, setShowPassword ] = useState(false);
+
+    const navigate = useNavigate();
+
+    const handleSubmit = async (
+        e: React.SyntheticEvent<HTMLFormElement>
+    ) => {
+        e.preventDefault();
+
+        setError("");
+        setLoading(true);
+
+        try {
+            const response = await fetch(
+                "http://localhost:3000/auth/register",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                    }),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError (data.error || "Registration Failed");
+                return;
+            }
+
+            navigate("/login");
+        } catch (error) {
+            console.error(error);
+            setError("Unable to connect to server.")
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="mx-auto mt-16 max-w-md rounded-lg border p-8 shadow">
+            <header className="mb-6 text-center">
+                <h1 className="text-3xl font-bold">
+                    Create Account
+                </h1>
+
+                <p className="mt-2 text-gray-600">
+                    Register for a new account
+                </p>
+            </header>
+
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4"
+            >
+                <div>
+                    <label className="mb-1 block font-medium">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) =>
+                            setEmail(e.target.value)
+                        }
+                        className="w-full rounded border p-2"
+                        required
+                    />
+                </div>
+
+                <div>
+                    <label className="mb-1 block font-medium">
+                        Password
+                    </label>
+                    
+                    <div className="relative">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        value={password}
+                        onChange={(e) =>
+                            setPassword(e.target.value)
+                        }
+                        className="w-full rounded border p-2 pr-10"
+                        required
+                    />
+
+                    <button 
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                    onClick={() => 
+                        setShowPassword(!showPassword)
+                    }>
+                        {
+                            showPassword
+                            ? <EyeOff size={20} />
+                            : <Eye size={20} />
+                        }
+                    </button>
+
+                    </div>
+                </div>
+
+                {error && (
+                    <p className="text-sm text-red-600">
+                        {error}
+                    </p>
+                )}
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="rounded bg-violet-600 p-2 font-medium text-white hover:bg-violet-700 disabled:opacity-50"
+                >
+                    {loading ? "Creating Account..." : "Create Account"}
+                </button>
+            </form>
+
+            <p className="mt-6 text-center text-sm">
+                Already have an account?{" "}
+                <Link
+                    to="/login"
+                    className="font-medium text-violet-600 hover:underline"
+                >
+                    Login
+                </Link>
+            </p>
+        </div>
+    );
+
+};

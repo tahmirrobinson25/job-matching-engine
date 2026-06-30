@@ -103,13 +103,48 @@ const handlePageChange = (newPage: number) => {
   setPage(newPage);
 };
 
-const hasResults = totalJobs > 0;
-const showEmptyState = hasLoadedOnce && !loading && jobs.length === 0;
+    const hasResults = totalJobs > 0;
+    const showEmptyState = hasLoadedOnce && !loading && jobs.length === 0;
 
-const searchState = {
+    const searchState = {
     filters,
     page,
-}
+    }
+
+    const fetchCurrentUser = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "http://localhost:3000/auth/me",
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        if (!response.ok) {
+            console.error("Authentication failed.");
+            return;
+        }
+
+        const user = await response.json();
+
+        console.log(user);
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+    useEffect(() => {
+        fetchCurrentUser();
+    }, []);
 
     return (
         <div className="mx-auto flex min-h-svh max-w-5xl flex-col px-4 pb-16 pt-8 sm:px-6 lg:px-8">
