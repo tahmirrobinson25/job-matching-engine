@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import type { Job, Filters, SearchState } from '../types';
 import { SearchForm } from '../components/SearchForm';
 import { JobList } from '../components/JobList';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/useAuth';
+
 
 type JobsApiResponse =
     | Job[]
@@ -51,10 +53,14 @@ export const JobSearchPage = () => {
         previousState?.page ?? 1
     );
 
+    const { currentUser, logout, loading: authLoading} = useAuth();
+
+    console.log(currentUser);
+
     const [totalPages, setTotalPages] = useState(1);
     const [totalJobs, setTotalJobs] = useState(0);
 
-    
+    const navigate = useNavigate();
 
     const fetchJobs = async () => {
         setLoading(true);
@@ -103,6 +109,11 @@ const handlePageChange = (newPage: number) => {
   setPage(newPage);
 };
 
+const handleLogout = () => {
+    logout();
+    navigate("/login");
+};
+
     const hasResults = totalJobs > 0;
     const showEmptyState = hasLoadedOnce && !loading && jobs.length === 0;
 
@@ -110,41 +121,6 @@ const handlePageChange = (newPage: number) => {
     filters,
     page,
     }
-
-    const fetchCurrentUser = async () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        return;
-    }
-
-    try {
-        const response = await fetch(
-            "http://localhost:3000/auth/me",
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-
-        if (!response.ok) {
-            console.error("Authentication failed.");
-            return;
-        }
-
-        const user = await response.json();
-
-        console.log(user);
-
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-    useEffect(() => {
-        fetchCurrentUser();
-    }, []);
 
     return (
         <div className="mx-auto flex min-h-svh max-w-5xl flex-col px-4 pb-16 pt-8 sm:px-6 lg:px-8">
@@ -155,8 +131,23 @@ const handlePageChange = (newPage: number) => {
                 <p className="mt-3 text-sm text-zinc-600">
                 Filter roles and compare match scores.
                 </p>
+                
             </header>
+            <div className="flex justify-end gap-4 mb-6">
+                <Link
+                    to="/login"
+                    className="rounded-lg bg-violet-600 px-4 py-2 text-white shadow-sm hover:bg-violet-700 transition"
+                >
+                    Login
+                </Link>
 
+                <button
+                    onClick={handleLogout}
+                    className="rounded-lg bg-zinc-700 px-4 py-2 text-white shadow-sm hover:bg-zinc-800 transition"
+                >
+                    Logout
+                </button>
+            </div>
             <SearchForm
             filters={filters}
             setFilters={setFilters}
