@@ -99,10 +99,14 @@ export const RegisterPage = () => {
                     />
 
                     <button 
+                    type="button"
                     className="absolute right-3 top-1/2 -translate-y-1/2"
                     onClick={() => 
                         setShowPassword(!showPassword)
-                    }>
+                        
+                    }
+                    onMouseDown={(e) => e.preventDefault()}
+                    >
                         {
                             showPassword
                             ? <EyeOff size={20} />

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '../context/useAuth';
 
 export const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -10,6 +11,8 @@ export const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
+
+    const { login } = useAuth();
 
     const handleSubmit = async (
         e: React.SyntheticEvent<HTMLFormElement>
@@ -42,6 +45,23 @@ export const LoginPage = () => {
             }
 
             localStorage.setItem("token", data.token);
+
+            const userResponse = await fetch(
+                "http://localhost:3000/auth/me",
+                {
+                    headers: {
+                        Authorization: `Bearer ${data.token}`,
+                    },
+                }
+            );
+
+            if (!userResponse.ok) {
+                throw new Error ("Unable to fetch user");
+            }
+
+            const user = await userResponse.json();
+
+            login(user);
 
             navigate("/");
         } catch (error) {
@@ -100,10 +120,13 @@ export const LoginPage = () => {
                         required
                     />
                     <button 
+                    type="button"
                     className="absolute right-3 top-1/2 -translate-y-1/2"
                     onClick={() => 
                         setShowPassword(!showPassword)
-                    }>
+                    }
+                    onMouseDown={(e) => e.preventDefault()}
+                    >
                         {
                             showPassword
                             ? <EyeOff size={20} />
