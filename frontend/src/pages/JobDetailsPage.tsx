@@ -5,7 +5,6 @@ import {  } from 'react-router-dom';
 
 export const JobDetailPage = () => {
     const { id } = useParams();
-    console.log('ID FROM URL:', id);
     const [job,setJob] = useState<Job | null>(null);
     const [loading, setLoading] = useState(true);
 

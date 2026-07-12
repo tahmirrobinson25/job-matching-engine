@@ -55,8 +55,6 @@ export const JobSearchPage = () => {
 
     const { currentUser, logout, loading: authLoading} = useAuth();
 
-    console.log(currentUser);
-
     const [totalPages, setTotalPages] = useState(1);
     const [totalJobs, setTotalJobs] = useState(0);
 
@@ -124,30 +122,6 @@ const handleLogout = () => {
 
     return (
         <div className="mx-auto flex min-h-svh max-w-5xl flex-col px-4 pb-16 pt-8 sm:px-6 lg:px-8">
-            <header className="mb-10 text-center sm:mb-12">
-                <h1 className="text-3xl font-semibold">
-                Job Matching Engine
-                </h1>
-                <p className="mt-3 text-sm text-zinc-600">
-                Filter roles and compare match scores.
-                </p>
-                
-            </header>
-            <div className="flex justify-end gap-4 mb-6">
-                <Link
-                    to="/login"
-                    className="rounded-lg bg-violet-600 px-4 py-2 text-white shadow-sm hover:bg-violet-700 transition"
-                >
-                    Login
-                </Link>
-
-                <button
-                    onClick={handleLogout}
-                    className="rounded-lg bg-zinc-700 px-4 py-2 text-white shadow-sm hover:bg-zinc-800 transition"
-                >
-                    Logout
-                </button>
-            </div>
             <SearchForm
             filters={filters}
             setFilters={setFilters}

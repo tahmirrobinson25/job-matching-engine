@@ -65,7 +65,6 @@ export const AuthProvider = ({
             const user: AuthUser = await response.json();
 
             setCurrentUser(user);
-            console.log("Authorized User:", user);
         } catch (error) {
             console.error(error);
 
