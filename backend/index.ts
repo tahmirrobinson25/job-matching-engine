@@ -2,9 +2,9 @@ import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 import type { Server } from 'node:http';
-import { router } from './routes/jobs.ts';
-import { authRouter } from './routes/auth.ts';
-import { prisma } from './src/lib/prisma.ts';
+import { router } from './routes/jobs.js';
+import { authRouter } from './routes/auth.js';
+import { prisma } from './src/lib/prisma.js';
 
 const app = express();
 

@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { scoreTitle, scoreLocation, scoreType, scoreSalary } from '../logic/utils.ts';
+import { scoreTitle, scoreLocation, scoreType, scoreSalary } from '../logic/utils.js';
 import type { Request, Response } from 'express';
-import { Prisma } from '../src/generated/prisma/client.ts';
-import { prisma } from '../src/lib/prisma.ts';
-import type { Job } from '../src/generated/prisma/client.ts';
+import { Prisma } from '../src/generated/prisma/client.js';
+import { prisma } from '../src/lib/prisma.js';
+import type { Job } from '../src/generated/prisma/client.js';
 
 export const router = Router();
 

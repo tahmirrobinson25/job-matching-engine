@@ -1,5 +1,5 @@
 //scoring functions and logical operations
-import { normalizeSynonyms } from './synonyms.ts'
+import { normalizeSynonyms } from './synonyms.js'
 
 export const scoreTitle = (jobTitle :string , userTitle :string) => {
   const job = normalizeSynonyms(jobTitle);

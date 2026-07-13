@@ -2,13 +2,10 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-     //"rootDir": "./src",
-     //"outDir": "./dist",
-
-      
-    "noEmit" : true,
-    "module" : "ESNext",
-    "moduleResolution": "bundler",
+    "rootDir": ".",
+    "outDir": "./dist",
+    "module" : "NodeNext",
+    "moduleResolution": "NodeNext",
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     
@@ -44,8 +41,15 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    "allowImportingTsExtensions": true
   },
+  "include": [
+    "index.ts",
+    "routes/**/*.ts",
+    "logic/**/*.ts",
+    "middleware/**/*.ts",
+    "src/**/*.ts",
+    "types/**/*.d.ts"
+  ],
   "ts-node": {
     "esm": true
   }

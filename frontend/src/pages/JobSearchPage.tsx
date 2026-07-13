@@ -103,14 +103,9 @@ export const JobSearchPage = () => {
   }
 };
 
-const handlePageChange = (newPage: number) => {
-  setPage(newPage);
-};
-
-const handleLogout = () => {
-    logout();
-    navigate("/login");
-};
+    const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    };
 
     const hasResults = totalJobs > 0;
     const showEmptyState = hasLoadedOnce && !loading && jobs.length === 0;
