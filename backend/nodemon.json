@@ -2,5 +2,5 @@
   "watch": ["index.ts", "routes", "middleware", "logic", "src/lib", "types"],
   "ext": "ts,json",
   "ignore": ["src/generated/**", "node_modules/**"],
-  "exec": "ts-node --esm index.ts"
+  "exec": "tsc && node dist/index.js"
 }

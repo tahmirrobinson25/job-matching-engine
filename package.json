@@ -1,4 +1,10 @@
 {
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev"
+  },
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "nodemon": "^3.1.14"
