@@ -43,7 +43,7 @@ export const JobList = ({
             ? 'Confirm the backend is running on'
             : 'Try broadening title or location, or confirm the API is running on'}{' '}
           <code className="rounded bg-zinc-200 px-1.5 py-0.5 text-xs text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
-            localhost:3000
+            Render Server
           </code>
           .
         </p>

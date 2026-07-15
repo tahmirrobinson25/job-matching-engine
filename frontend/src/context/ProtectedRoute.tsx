@@ -16,7 +16,7 @@ export const ProtectedRoute = ({
     }
 
     if (!currentUser) {
-        return <Navigate to="/login" replace/>;
+        return <Navigate to="`${API_URL}`/login" replace/>;
     }
 
     return children;

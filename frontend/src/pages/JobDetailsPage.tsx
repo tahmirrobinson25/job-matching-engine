@@ -2,6 +2,7 @@ import { Link, useParams, useLocation} from 'react-router-dom';
 import type { Job, SearchState } from '../types';
 import {useEffect, useState} from 'react';
 import {  } from 'react-router-dom';
+import { API_URL } from "../config/api";
 
 export const JobDetailPage = () => {
     const { id } = useParams();
@@ -23,7 +24,7 @@ export const JobDetailPage = () => {
     useEffect(() => {
         const fetchJob = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/jobs/${id}`);
+                const response = await fetch(`${API_URL}/jobs/${id}`);
                 if (!response.ok) {
                     throw new Error('Job not found');
                 }

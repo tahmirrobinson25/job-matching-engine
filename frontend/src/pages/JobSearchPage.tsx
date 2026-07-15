@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import type { Job, Filters, SearchState } from '../types';
 import { SearchForm } from '../components/SearchForm';
 import { JobList } from '../components/JobList';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
-
+import { API_URL } from "../config/api";
 
 type JobsApiResponse =
     | Job[]
@@ -66,7 +66,7 @@ export const JobSearchPage = () => {
 
         try {
             const response = await fetch(
-            `http://localhost:3000/jobs?title=${encodeURIComponent(filters.title)}&location=${encodeURIComponent(filters.location)}&type=${encodeURIComponent(filters.type)}&salary=${encodeURIComponent(filters.salary)}&page=${page}&company=`
+            `${API_URL}/jobs?title=${encodeURIComponent(filters.title)}&location=${encodeURIComponent(filters.location)}&type=${encodeURIComponent(filters.type)}&salary=${encodeURIComponent(filters.salary)}&page=${page}&company=`
             );
 
             if (!response.ok) {

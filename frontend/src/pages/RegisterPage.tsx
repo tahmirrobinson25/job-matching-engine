@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import { API_URL } from "../config/api";
 
 export const RegisterPage = () => {
     const [email, setEmail] = useState("");
@@ -21,7 +22,7 @@ export const RegisterPage = () => {
 
         try {
             const response = await fetch(
-                "http://localhost:3000/auth/register",
+                `${API_URL}/auth/register`,
                 {
                     method: "POST",
                     headers: {

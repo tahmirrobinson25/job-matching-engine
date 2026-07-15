@@ -5,6 +5,8 @@ import {
     type ReactNode,
 } from "react";
 
+import { API_URL } from "../config/api";
+
 type AuthUser = {
     id: number;
     email: string;
@@ -50,7 +52,7 @@ export const AuthProvider = ({
 
         try {
             const response = await fetch(
-                "http://localhost:3000/auth/me",
+                `${API_URL}/auth/me`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

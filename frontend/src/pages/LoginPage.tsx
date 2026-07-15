@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/useAuth';
+import { API_URL } from "../config/api";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -24,7 +25,7 @@ export const LoginPage = () => {
 
         try {
             const response = await fetch(
-                "http://localhost:3000/auth/login",
+                `${API_URL}/auth/login`,
                 {
                     method: "POST",
                     headers: {
@@ -47,7 +48,7 @@ export const LoginPage = () => {
             localStorage.setItem("token", data.token);
 
             const userResponse = await fetch(
-                "http://localhost:3000/auth/me",
+                `${API_URL}/auth/me`,
                 {
                     headers: {
                         Authorization: `Bearer ${data.token}`,

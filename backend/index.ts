@@ -9,7 +9,15 @@ import { prisma } from './src/lib/prisma.js';
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://job-matching-engine-five.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 
 app.get('/ping', (_req, res) => {
   res.json({ message: 'Server is running' });
