@@ -41,6 +41,13 @@ export const NavBar = () => {
                     Logout
                 </button>
 
+                <Link 
+                to="/jobs/mine"
+                className="flex flex-col"
+                >
+                    My Jobs
+                </Link>
+
             </div>
         ) : (
             <div className="flex items-center gap-4">

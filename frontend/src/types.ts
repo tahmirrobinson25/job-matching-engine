@@ -2,11 +2,11 @@
         id: number;
         title: string;
         company: string;
-        location: string;
+        location: string | null;
         type: string;
-        salary: number;
-        skills: string[];
-        description: string;
+        salary: number | null;
+        skills?: string[];
+        description: string | null;
         score?: number;
     };
 

@@ -73,32 +73,34 @@ export const SearchForm = ({
           <label className={labelClass} htmlFor="filter-location">
             Location
           </label>
-          <input
+          <select
             id="filter-location"
-            type="text"
             value={filters.location}
-            placeholder="e.g. Remote, New Jersey"
             className={fieldClass}
             onChange={(e) =>
               setFilters({ ...filters, location: e.target.value })
             }
-          />
+          >
+            <option value="">All locations</option>
+            {LOCATIONS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+          </select>
         </div>
 
         <div className="text-left">
           <label className={labelClass} htmlFor="filter-type">
             Job type
           </label>
-          <input
+          <select
             id="filter-type"
-            type="text"
             value={filters.type}
-            placeholder="e.g. Full-time, Contract"
             className={fieldClass}
             onChange={(e) =>
               setFilters({ ...filters, type: e.target.value })
             }
-          />
+          >
+            <option value="">All job types</option>
+            {JOB_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}
+          </select>
         </div>
 
         <div className="text-left">
@@ -122,3 +124,4 @@ export const SearchForm = ({
     </form>
   );
 };
+import { JOB_TYPES, LOCATIONS } from '../constants/jobOptions';

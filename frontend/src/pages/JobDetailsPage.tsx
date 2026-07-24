@@ -1,8 +1,12 @@
-import { Link, useParams, useLocation} from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import type { Job, SearchState } from '../types';
-import {useEffect, useState} from 'react';
-import {  } from 'react-router-dom';
-import { API_URL } from "../config/api";
+import { useEffect, useState } from 'react';
+import { API_URL } from '../config/api';
+
+const formatSalary = (salary: number | null | undefined) =>
+    typeof salary === 'number' && Number.isFinite(salary)
+        ? salary.toLocaleString()
+        : 'Not specified';
 
 export const JobDetailPage = () => {
     const { id } = useParams();
@@ -77,16 +81,16 @@ export const JobDetailPage = () => {
 
                         <div>
                             <p>
-                                <strong>Location:</strong> {job.location}
+                                <strong>Location:</strong> {job.location ?? 'Not specified'}
                             </p>
 
                             <p className="mt-4">
-                                <strong>Type:</strong> {job.type}
+                                <strong>Type:</strong> {job.type || 'Not specified'}
                             </p>
 
                             <p className="mt-4">
                                 <strong>Salary:</strong> $
-                                {job.salary.toLocaleString()}
+                                {formatSalary(job.salary)}
                             </p>
                         </div>
 
@@ -119,12 +123,12 @@ export const JobDetailPage = () => {
 
                 <div className="mt-8 rounded-xl border p-6 shadow-sm">
                     <h2 className="text-xl font-semibold">Description: </h2>
-                    <p className="mt-2 whitespace-pre-line leading-7">{job.description}</p>
+                    <p className="mt-2 whitespace-pre-line leading-7">{job.description ?? 'No description provided.'}</p>
                 </div>
 
                 <div className="mt-8 mx-auto rounded-xl border p-6 shadow-sm ">
                     <h2 className="text-xl font-semibold">Skills: </h2>
-                {job.skills && (
+                {Array.isArray(job.skills) && job.skills.length > 0 ? (
                     <div className="mt-8">
                         <h2 className="text-xl font-semibold ">
                         Skills
@@ -140,7 +144,7 @@ export const JobDetailPage = () => {
                         ))}
                         </div>
                     </div>
-                )}
+                ) : <p className="mt-2 text-zinc-500">No skills listed.</p>}
                 </div>
             </div>
         );
