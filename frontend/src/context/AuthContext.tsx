@@ -7,8 +7,10 @@ import {
 
 import { API_URL } from "../config/api";
 
-type AuthUser = {
+export type AuthUser = {
     id: number;
+    firstName: string | null;
+    lastName: string | null;
     email: string;
     createdAt: string;
 };
@@ -17,6 +19,7 @@ type AuthContextType = {
     currentUser: AuthUser | null;
     loading: boolean;
     login: (user: AuthUser) => void;
+    updateCurrentUser: (user: AuthUser) => void;
     logout: () => void;
 };
 
@@ -34,6 +37,10 @@ export const AuthProvider = ({
         useState(true);
 
     const login = (user: AuthUser) => {
+        setCurrentUser(user);
+    };
+
+    const updateCurrentUser = (user: AuthUser) => {
         setCurrentUser(user);
     };
 
@@ -87,6 +94,7 @@ export const AuthProvider = ({
                 currentUser,
                 loading,
                 login,
+                updateCurrentUser,
                 logout,
             }}
         >

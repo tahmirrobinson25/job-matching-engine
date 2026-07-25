@@ -4,6 +4,8 @@ import { Eye, EyeOff } from 'lucide-react';
 import { API_URL } from "../config/api";
 
 export const RegisterPage = () => {
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -29,6 +31,8 @@ export const RegisterPage = () => {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
+                        firstName,
+                        lastName,
                         email,
                         password,
                     }),
@@ -67,6 +71,16 @@ export const RegisterPage = () => {
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4"
             >
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <label className="mb-1 block font-medium">First name (optional)</label>
+                        <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="w-full rounded border p-2" maxLength={50} />
+                    </div>
+                    <div>
+                        <label className="mb-1 block font-medium">Last name (optional)</label>
+                        <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} className="w-full rounded border p-2" maxLength={50} />
+                    </div>
+                </div>
                 <div>
                     <label className="mb-1 block font-medium">
                         Email
