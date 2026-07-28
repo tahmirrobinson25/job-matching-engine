@@ -24,6 +24,8 @@ model Job {
 
   isPublic    Boolean @default(true)
 
+  savedBy     SavedJob[]
+
   @@map("jobs")
 }
 
@@ -38,8 +40,21 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  jobs  Job[]
+  jobs      Job[]
+  savedJobs SavedJob[]
   @@map("users")
+}
+
+model SavedJob {
+  userId    Int
+  jobId     Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  job  Job  @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@id([userId, jobId])
+  @@map("saved_jobs")
 }
 
 enum Role {

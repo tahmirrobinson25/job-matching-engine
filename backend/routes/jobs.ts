@@ -58,6 +58,22 @@ router.get('/mine', authMiddleware, async (req, res) => {
   }
 });
 
+router.get('/saved', authMiddleware, async (req, res) => {
+  const userId = req.userId;
+  if (userId === undefined) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const savedJobs = await prisma.savedJob.findMany({
+      where: { userId },
+      include: { job: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(savedJobs.map((savedJob) => savedJob.job));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 router.post('/', authMiddleware, async (req, res) => {
   const input = parseJobInput(req.body);
   if (!input) return res.status(400).json({ error: 'A title, company, type, and valid non-negative salary are required.' });
@@ -113,6 +129,40 @@ router.get('/:id', async (req, res) => {
     const job = await prisma.job.findFirst({ where: { id, isPublic: true } });
     if (!job) return res.status(404).json({ error: 'Job not found' });
     res.json(job);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.post('/:id/save', authMiddleware, async (req, res) => {
+  const id = Number(req.params.id);
+  const userId = req.userId;
+  if (!Number.isInteger(id)) return res.status(400).json({ error: 'Invalid job id' });
+  if (userId === undefined) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const job = await prisma.job.findFirst({ where: { id, isPublic: true } });
+    if (!job) return res.status(404).json({ error: 'Job not found' });
+    await prisma.savedJob.upsert({
+      where: { userId_jobId: { userId, jobId: id } },
+      create: { userId, jobId: id },
+      update: {},
+    });
+    res.status(201).json({ message: 'Job saved' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+router.delete('/:id/save', authMiddleware, async (req, res) => {
+  const id = Number(req.params.id);
+  const userId = req.userId;
+  if (!Number.isInteger(id)) return res.status(400).json({ error: 'Invalid job id' });
+  if (userId === undefined) return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    await prisma.savedJob.deleteMany({ where: { userId, jobId: id } });
+    res.status(204).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });

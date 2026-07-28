@@ -1,7 +1,8 @@
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import type { Job, SearchState } from '../types';
 import { useEffect, useState } from 'react';
 import { API_URL } from '../config/api';
+import { useAuth } from '../context/useAuth';
 
 const formatSalary = (salary: number | null | undefined) =>
     typeof salary === 'number' && Number.isFinite(salary)
@@ -12,8 +13,12 @@ export const JobDetailPage = () => {
     const { id } = useParams();
     const [job,setJob] = useState<Job | null>(null);
     const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [saveMessage, setSaveMessage] = useState('');
 
     const location = useLocation();
+    const navigate = useNavigate();
+    const { currentUser, logout } = useAuth();
 
     const searchState = location.state as SearchState | undefined;
 
@@ -21,9 +26,26 @@ export const JobDetailPage = () => {
         alert("Apply feature not available. Check back soon!");
     }
 
-    const handleSave = () => {
-        alert("Save feature not available. Check back soon!");
-    }
+    const handleSave = async () => {
+        if (!currentUser) {
+            navigate('/login');
+            return;
+        }
+        setSaving(true);
+        setSaveMessage('');
+        try {
+            const response = await fetch(`${API_URL}/jobs/${id}/save`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            });
+            if (response.status === 401) { logout(); navigate('/login', { replace: true }); return; }
+            if (!response.ok) throw new Error('Unable to save job');
+            setSaveMessage('Job saved to your dashboard.');
+        } catch (error) {
+            console.error(error);
+            setSaveMessage('Unable to save this job. Please try again.');
+        } finally { setSaving(false); }
+    };
 
     useEffect(() => {
         const fetchJob = async () => {
@@ -106,8 +128,9 @@ export const JobDetailPage = () => {
                             <button
                                 className="inline-flex h-10 shrink-0 items-center justify-center rounded-lg bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 active:scale-[0.98] dark:bg-violet-500 dark:hover:bg-violet-400 dark:focus-visible:outline-violet-400"
                                 onClick={handleSave}
+                                disabled={saving}
                             >
-                                Save Job
+                                {saving ? 'Saving...' : 'Save Job'}
                             </button>
 
                         </div>
@@ -115,6 +138,7 @@ export const JobDetailPage = () => {
                     </div>
 
                 </div>
+                {saveMessage && <p className="mt-4 text-center text-sm text-violet-700">{saveMessage}</p>}
                 <div className="mt-6 flex justify-center">
                     <span className="rounded-full bg-green-100 px-4 py-2 font-semibold text-green-700">
                         Match Score: {job.score ?? "N/A"}
