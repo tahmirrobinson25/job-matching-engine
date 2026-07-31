@@ -48,7 +48,8 @@
     "logic/**/*.ts",
     "middleware/**/*.ts",
     "src/**/*.ts",
-    "types/**/*.d.ts"
+    "types/**/*.d.ts",
+    "test/**/*.ts"
   ],
   "ts-node": {
     "esm": true

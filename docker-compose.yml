@@ -1,0 +1,15 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL:?Set DATABASE_URL to your Neon pooled connection string}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET}
+      DATABASE_CONNECT_RETRIES: ${DATABASE_CONNECT_RETRIES:-5}
+      DATABASE_RETRY_DELAY_MS: ${DATABASE_RETRY_DELAY_MS:-500}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+    restart: unless-stopped

@@ -41,6 +41,16 @@ From the backend directory, run:
 npm run dev
 Expected output:
 Server running on port 3000
+
+Docker / Neon DB
+
+Create a root `.env` file with `DATABASE_URL` set to the **pooled** Neon PostgreSQL URL and a `JWT_SECRET`, then run:
+
+```sh
+docker compose up --build
+```
+
+The container applies Prisma migrations before starting and exposes `/ping` for liveness and `/health/ready` for database readiness. Neon URLs are enforced to use TLS, startup retries transient connection failures (for example a cold compute wake-up), and invalid URLs or authentication failures fail fast rather than retrying indefinitely.
 Start the Frontend
 From the frontend directory, run:
 npm run dev

@@ -5,22 +5,39 @@ import type { Server } from 'node:http';
 import { router } from './routes/jobs.js';
 import { authRouter } from './routes/auth.js';
 import { prisma } from './src/lib/prisma.js';
+import {
+  databaseConnectRetries,
+  databaseRetryDelay,
+  isRetryableDatabaseError,
+  sleep,
+} from './src/lib/database.js';
 
 const app = express();
+const corsOrigins = (process.env.CORS_ORIGIN ?? 'http://localhost:5173,https://job-matching-engine-five.vercel.app')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(express.json());
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://job-matching-engine-five.vercel.app",
-    ],
+    origin: corsOrigins,
     credentials: true,
   })
 );
 
 app.get('/ping', (_req, res) => {
   res.json({ message: 'Server is running' });
+});
+
+app.get('/health/ready', async (_req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.json({ status: 'ready' });
+  } catch (error) {
+    console.error('Database readiness check failed:', error);
+    res.status(503).json({ status: 'unavailable', error: 'Database is unavailable' });
+  }
 });
 
 app.use('/jobs', router);
@@ -65,16 +82,22 @@ async function shutdown(signal: string) {
 }
 
 async function main() {
-  if (!process.env.DATABASE_URL) {
-    console.error('DATABASE_URL is not set in .env');
-    process.exit(1);
-  }
-
   if (!process.env.JWT_SECRET) {
     console.warn('Warning: JWT_SECRET is not set. Auth login will fail until it is configured.');
   }
 
-  await prisma.$connect();
+  const retries = databaseConnectRetries();
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      await prisma.$connect();
+      break;
+    } catch (error) {
+      if (!isRetryableDatabaseError(error) || attempt >= retries) throw error;
+      const delay = databaseRetryDelay(attempt);
+      console.warn(`Database connection failed; retrying in ${delay}ms (${attempt + 1}/${retries}).`);
+      await sleep(delay);
+    }
+  }
   server = startServer();
 
   process.on('SIGINT', () => {
