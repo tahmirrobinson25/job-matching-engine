@@ -36,9 +36,11 @@ export const authMiddleware = (
   }
 
   try {
-    const decoded = jwt.verify(token, jwtSecret) as AuthTokenPayload;
+    const decoded = jwt.verify(token, jwtSecret, {
+      algorithms: ['HS256'] 
+    }) as AuthTokenPayload;
 
-    if (decoded.userId === undefined) {
+    if (!Number.isInteger(decoded.userId) || decoded.userId <= 0) {
       return res.status(401).json({
         error: 'Unauthorized',
       });

@@ -45,7 +45,6 @@ export const SearchForm = ({
           type="submit"
           className="mt-4 inline-flex h-10 shrink-0 items-center justify-center rounded-lg bg-violet-600 px-5 text-sm font-medium text-white shadow-sm transition hover:bg-violet-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 active:scale-[0.98] dark:bg-violet-500 dark:hover:bg-violet-400 dark:focus-visible:outline-violet-400 sm:mt-0"
           id="search-btn"
-          onClick={handleSubmit}
           disabled={loading}
         >
           {loading ? 'Searching...' : 'Search Jobs'}

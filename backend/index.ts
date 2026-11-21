@@ -48,7 +48,7 @@ const PORT = Number(process.env.PORT) || 3000;
 let server: Server | undefined;
 
 function startServer(): Server {
-  const httpServer = app.listen(PORT);
+  const httpServer = app.listen(PORT, "0.0.0.0");
 
   httpServer.on('listening', () => {
     console.log(`Server running on port ${PORT}`);
