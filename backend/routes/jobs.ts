@@ -177,9 +177,19 @@ router.put('/:id', authMiddleware, async (req, res) => {
   const userId = req.userId;
   if (userId === undefined) return res.status(401).json({ error: 'Unauthorized' });
   try {
-    if (!(await findOwnedJob(id, userId))) return res.status(404).json({ error: 'Job not found' });
-    const job = await prisma.job.update({ where: { id }, data: input });
-    res.json(job);
+    const jobs = await prisma.job.updateManyAndReturn({
+  where: {
+    id,
+    ownerId: userId
+  },
+  data: input
+});
+
+  if (jobs.length === 0) {
+    return res.status(404).json({error: 'Job not found'})
+  };
+
+  return res.json(jobs[0]);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error' });
@@ -192,11 +202,21 @@ router.delete('/:id', authMiddleware, async (req, res) => {
   const userId = req.userId;
   if (userId === undefined) return res.status(401).json({ error: 'Unauthorized' });
   try {
-    if (!(await findOwnedJob(id, userId))) return res.status(404).json({ error: 'Job not found' });
-    await prisma.job.delete({ where: { id } });
-    res.status(204).send();
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Server error' });
+  const result = await prisma.job.deleteMany({
+  where: {
+  id,
+  ownerId: userId
   }
+  });
+
+  if (result.count === 0) {
+  return res.status(404).json({ error: 'Job not found' });
+}
+
+  res.status(204).send();
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ error: 'Server error' });
+
+}
 });
