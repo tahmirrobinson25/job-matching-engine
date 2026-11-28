@@ -4,7 +4,7 @@
 **Start date:** November 29, 2026  
 **Stack:** React, TypeScript, Node.js, Express, PostgreSQL, Prisma, JWT  
 **Objective:** Improve the existing application into a functional, secure, tested, and deployable full-stack MVP without rebuilding it.  
-**Estimated duration:** 4–7 focused weeks, subject to the initial audit and implementation findings.
+**Estimated duration:** 4–8 focused weeks, subject to the initial audit and implementation findings.
 
 Use the checkboxes to track work. Update each milestone status as **Not Started**, **In Progress**, **Blocked**, or **Complete**. Reassess the timeline after the baseline audit.
 
